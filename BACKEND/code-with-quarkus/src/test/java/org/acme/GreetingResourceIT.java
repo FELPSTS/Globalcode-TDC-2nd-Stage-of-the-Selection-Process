@@ -4,5 +4,6 @@ import io.quarkus.test.junit.QuarkusIntegrationTest;
 
 @QuarkusIntegrationTest
 class GreetingResourceIT extends GreetingResourceTest {
-    // Execute the same tests but in packaged mode.
+    // A classe de teste de integração não precisa redefinir o recurso.
+    // Ela herda os testes definidos em GreetingResourceTest.
 }

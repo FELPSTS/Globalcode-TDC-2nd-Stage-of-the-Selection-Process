@@ -43,6 +43,9 @@ node server.js
    ```
    http://localhost:8080/propostas
    ```
-
+## BANCO DE DADOS  
+- Optei por utilizar **SQL** como banco de dados.  
+- Para executá-lo, basta iniciar o servidor do banco de dados em uma ferramenta como o **MySQL Workbench**.
+  
 ### Conclusão  
 Apesar das dificuldades, esta foi uma ótima oportunidade para aprender mais sobre **Quarkus com Node.js**. Pretendo continuar aprimorando o projeto e implementar as funcionalidades que ficaram pendentes.  

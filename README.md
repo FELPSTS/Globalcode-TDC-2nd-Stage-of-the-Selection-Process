@@ -44,5 +44,5 @@ node server.js
    http://localhost:8080/propostas
    ```
 
-## 💡 Conclusão  
-Apesar das dificuldades, esta foi uma ótima oportunidade para aprender mais sobre **Quarkus, Node.js e bancos de dados SQL**. Pretendo continuar aprimorando o projeto e implementar as funcionalidades que ficaram pendentes.  
+### Conclusão  
+Apesar das dificuldades, esta foi uma ótima oportunidade para aprender mais sobre **Quarkus com Node.js**. Pretendo continuar aprimorando o projeto e implementar as funcionalidades que ficaram pendentes.  

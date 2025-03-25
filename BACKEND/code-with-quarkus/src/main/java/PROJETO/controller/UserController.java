@@ -6,12 +6,12 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.transaction.Transactional;
+
 import java.util.UUID;
 
 @Path("/users")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-
 public class UserController {
 
     private final UserService userService;
@@ -27,17 +27,27 @@ public class UserController {
         return Response.ok(users).build();
     }
 
-    @POST
-    @Transactional
-    public UserEntity createUser(UserEntity userEntity) {
-        userEntity.persist();  // Persistir o usuário no banco
-        return userEntity;
-    }
-
-    // Endpoint para buscar um usuário por ID
     @GET
     @Path("/{id}")
     public Response findById(@PathParam("id") UUID userId) {
-        return Response.ok(userService.findById(userId)).build();
+        UserEntity user = userService.findById(userId);
+        if (user == null) {
+            return Response.status(Response.Status.NOT_FOUND).entity("Usuário não encontrado").build();
+        }
+        return Response.ok(user).build();
+    }
+
+    @POST
+    @Transactional
+    public Response createUser(UserEntity userEntity) {
+        UserEntity createdUser = userService.createUser(userEntity);
+        return Response.status(Response.Status.CREATED).entity(createdUser).build();
+    }
+
+    @DELETE
+    @Path("/{id}")
+    public Response deleteUserById(@PathParam("id") UUID id) {
+        userService.deleteById(id);
+        return Response.noContent().build();
     }
 }

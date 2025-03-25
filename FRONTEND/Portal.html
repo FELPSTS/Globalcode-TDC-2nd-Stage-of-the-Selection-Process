@@ -12,6 +12,8 @@
         form { margin-top: 20px; }
         input { padding: 8px; margin: 5px; }
         button { padding: 10px; }
+        .error { color: red; font-weight: bold; margin-top: 20px; }
+        .success { color: green; font-weight: bold; margin-top: 20px; }
     </style>
 </head>
 <body>
@@ -25,6 +27,7 @@
                 <th>Email</th>
                 <th>Título</th>
                 <th>Descrição</th>
+                <th>Ações</th> <!-- Coluna para o botão de deletar -->
             </tr>
         </thead>
         <tbody id="userTableBody">
@@ -41,36 +44,71 @@
         <button type="submit">Cadastrar</button>
     </form>
 
-    <script>
+    <h2>Procurar Usuário por ID</h2>
+    <form id="searchForm">
+        <input type="text" id="searchId" placeholder="ID do Usuário" required>
+        <button type="submit">Buscar</button>
+    </form>
 
+    <div id="statusMessage"></div> 
+
+    <script>
         async function fetchUsers() {
             try {
-                const response = await fetch('http://localhost:8080/users'); // URL do backend
+                const response = await fetch('http://localhost:8080/users'); 
+                if (!response.ok) throw new Error('Erro ao buscar usuários');
+                
                 const users = await response.json();
                 const tableBody = document.getElementById('userTableBody');
-
                 tableBody.innerHTML = '';
 
                 users.forEach(user => {
                     const row = `<tr>
                         <td>${user.id}</td>
-                        <td>${user.authorName}</td>
+                        <td>${user.name}</td> <!-- Ajuste o nome do campo conforme necessário -->
                         <td>${user.email}</td>
                         <td>${user.title}</td>
                         <td>${user.description}</td>
+                        <td><button onclick="deleteUser('${user.id}')">Deletar</button></td> <!-- Botão de deletar -->
                     </tr>`;
                     tableBody.innerHTML += row;
                 });
             } catch (error) {
                 console.error("Erro ao buscar usuários:", error);
-                alert("Erro ao carregar os usuários. Tente novamente.");
+                showStatusMessage("Erro ao carregar os usuários. Tente novamente.", 'error');
             }
+        }
+
+        async function deleteUser(userId) {
+            if (confirm("Tem certeza que deseja deletar este usuário?")) {
+                try {
+                    const response = await fetch(`http://localhost:8080/users/${userId}`, {
+                        method: 'DELETE',
+                    });
+
+                    if (response.ok) {
+                        showStatusMessage('Usuário deletado com sucesso!', 'success');
+                        fetchUsers(); 
+                    } else {
+                        showStatusMessage('Erro ao deletar usuário!', 'error');
+                    }
+                } catch (error) {
+                    console.error("Erro ao deletar usuário:", error);
+                    showStatusMessage("Erro ao deletar usuário. Tente novamente.", 'error');
+                }
+            }
+        }
+
+        function showStatusMessage(message, type) {
+            const statusMessage = document.getElementById('statusMessage');
+            statusMessage.innerHTML = message;
+            statusMessage.className = type === 'error' ? 'error' : 'success';
         }
 
         document.getElementById('userForm').addEventListener('submit', async function(event) {
             event.preventDefault();
             const userData = {
-                authorName: document.getElementById('authorName').value,
+                name: document.getElementById('authorName').value, 
                 email: document.getElementById('email').value,
                 title: document.getElementById('title').value,
                 description: document.getElementById('description').value
@@ -84,17 +122,45 @@
                 });
 
                 if (response.ok) {
-                    alert('Usuário cadastrado com sucesso!');
-                    fetchUsers(); 
+                    showStatusMessage('Usuário cadastrado com sucesso!', 'success');
+                    fetchUsers();
                     document.getElementById('userForm').reset();
                 } else {
-                    alert('Erro ao cadastrar usuário!');
+                    showStatusMessage('Erro ao cadastrar usuário!', 'error');
                 }
             } catch (error) {
                 console.error("Erro ao cadastrar usuário:", error);
-                alert("Erro ao cadastrar usuário. Tente novamente.");
+                showStatusMessage("Erro ao cadastrar usuário. Tente novamente.", 'error');
             }
         });
+
+        document.getElementById('searchForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const userId = document.getElementById('searchId').value;
+            fetchUserById(userId); // Chama a função para buscar o usuário pelo ID
+        });
+
+        async function fetchUserById(userId) {
+            try {
+                const response = await fetch(`http://localhost:8080/users/${userId}`);
+                if (!response.ok) throw new Error('Usuário não encontrado');
+                
+                const user = await response.json();
+                showStatusMessage(`Usuário encontrado: ${user.name}`, 'success');
+                
+                const tableBody = document.getElementById('userTableBody');
+                tableBody.innerHTML = `<tr>
+                    <td>${user.id}</td>
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>${user.title}</td>
+                    <td>${user.description}</td>
+                </tr>`;
+            } catch (error) {
+                console.error("Erro ao buscar usuário:", error);
+                showStatusMessage("Erro ao encontrar o usuário. Tente novamente.", 'error');
+            }
+        }
 
         fetchUsers(); 
     </script>

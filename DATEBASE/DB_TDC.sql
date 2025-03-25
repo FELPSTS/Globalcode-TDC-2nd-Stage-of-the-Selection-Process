@@ -2,21 +2,11 @@ CREATE DATABASE globalcode;
 USE globalcode;
 
 CREATE TABLE users (
-	id 					INT(36) AUTO_INCREMENT PRIMARY KEY,
-	authorName 			VARCHAR(255) NOT NULL,
-	email				VARCHAR(255) UNIQUE NOT NULL	
-);
-
-
-INSERT INTO users (id, authorName, email) VALUES ( 'TORQUATO', 'felipe@example.com');
-INSERT INTO users ( authorName, email) VALUES ( 'PROGRAMA2', 'PROGRAM2ADOR@example.com');
-SELECT * FROM users;
-
-CREATE TABLE events (
-    id           		INT AUTO_INCREMENT PRIMARY KEY,
-    name         		VARCHAR(255) NOT NULL,
-    description  		TEXT NOT NULL,
-    date         		DATE NOT NULL
+    id INT(36) AUTO_INCREMENT PRIMARY KEY, -- ID gerado automaticamente
+    authorName VARCHAR(255) NOT NULL, 
+    email VARCHAR(255) UNIQUE NOT NULL,
+	title         		VARCHAR(255) NOT NULL,
+    description  		TEXT NOT NULL
 );
 
 CREATE TABLE Event_proposal(

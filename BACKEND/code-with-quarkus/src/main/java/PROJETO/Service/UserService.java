@@ -10,22 +10,19 @@ import java.util.UUID;
 @ApplicationScoped
 public class UserService {
 
-    // Método para criar um usuário
     public UserEntity createUser(UserEntity userEntity) {
         userEntity.persist();
         return userEntity;
     }
 
-    // Método para buscar todos os usuários com paginação
     public List<UserEntity> findAll(Integer page, Integer pageSize) {
         return UserEntity.findAll()
                 .page(page, pageSize)
                 .list();
     }
 
-    public UserEntity findById(UUID userid) {
-        return (UserEntity) UserEntity.findByIdOptional(userid)
+    public UserEntity findById(UUID userId) {
+        return (UserEntity) UserEntity.findByIdOptional(userId)
                 .orElseThrow(UserNotFoundExeception::new);
     }
-
 }

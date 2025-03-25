@@ -10,7 +10,7 @@ import java.util.UUID;
 public class UserEntity extends PanacheEntityBase {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)  // Utilize AUTO para UUID
+    @GeneratedValue(strategy = GenerationType.AUTO)  // UUID gerado automaticamente
     public UUID id;
 
     @Column(name = "authorName")
@@ -18,4 +18,12 @@ public class UserEntity extends PanacheEntityBase {
 
     @Column(name = "email")
     public String email;
+
+    @Column(name = "title")
+    public String title;
+
+    @Column(name = "description")
+    public String description;
+
+    // Getters and setters (se necessário)
 }

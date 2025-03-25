@@ -10,13 +10,12 @@ import java.util.UUID;
 public class UserEntity extends PanacheEntityBase {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)  // Definir como AUTO_INCREMENT no MySQL
-    public int id;
+    @GeneratedValue(strategy = GenerationType.AUTO)  // Utilize AUTO para UUID
+    public UUID id;
 
-    @Column(name = "authorName")  // Nome do campo na tabela
+    @Column(name = "authorName")
     public String authorName;
 
-    @Column(name = "email")  // Nome do campo na tabela
+    @Column(name = "email")
     public String email;
 }
-
